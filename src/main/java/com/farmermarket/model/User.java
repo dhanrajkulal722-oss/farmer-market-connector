@@ -2,98 +2,213 @@ package com.farmermarket.model;
 
 import com.farmermarket.enums.BuyerType;
 import com.farmermarket.enums.Role;
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.farmermarket.enums.UserStatus;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
-// @Entity tells JPA:
-// "This class is a database table"
-// JPA will create 'users' table automatically
 @Entity
-
-// @Table tells JPA the exact table name
 @Table(name = "users")
-
-// @Data from Lombok automatically generates:
-// getters, setters, toString, equals, hashCode
-// Saves us writing 100+ lines of boilerplate
-@Data
-
-// Generates constructor with ALL fields
-@AllArgsConstructor
-
-// Generates constructor with NO fields
-// JPA requires this - it creates objects
-// using empty constructor internally
-@NoArgsConstructor
 public class User {
 
-    // @Id marks this as PRIMARY KEY
     @Id
-    // @GeneratedValue AUTO_INCREMENT
-    // Database auto assigns 1,2,3,4...
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // @Column defines column properties
-    // nullable = false means NOT NULL in DB
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String name;
 
-    // unique = true means no two users
-    // can have same email
-    @Column(nullable = false, unique = true)
+    @Column(
+        nullable = false,
+        unique = true,
+        length = 100)
     private String email;
 
     @Column(nullable = false)
     private String password;
 
-    // Phone must be unique
-    // Used for WhatsApp notifications
-    @Column(nullable = false, unique = true)
+    @Column(
+        nullable = false,
+        unique = true,
+        length = 15)
     private String phone;
 
-    // @Enumerated tells JPA to store
-    // enum as STRING in database
-    // Stores "FARMER" not 0 or 1
-    // Much more readable in database
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
 
-    // Only filled for BUYER users
-    // NULL for farmers
     @Enumerated(EnumType.STRING)
     private BuyerType buyerType;
 
-    // Business name for commercial buyers
-    // "Hotel Taj Mahal Mangalore"
     private String businessName;
 
-    // City or town
-    // "Puttur", "Mangalore", "Udupi"
+    @Enumerated(EnumType.STRING)
+    private UserStatus status;
+
     private String location;
 
-    // District name
-    // "Dakshina Kannada", "Udupi"
     private String district;
 
-    // Has admin verified this buyer?
-    // Default false when registered
-    @Column(columnDefinition = "boolean default false")
-    private Boolean isVerified = false;
+    private Boolean isVerified;
 
-    // Is account active?
-    // Default true when registered
-    // Admin can set false to suspend
-    @Column(columnDefinition = "boolean default true")
-    private Boolean isActive = true;
+    private Boolean isActive;
 
-    // @CreationTimestamp automatically
-    // saves current time when user registers
-    // No need to set this manually
     @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
+
+    // ════════════════════════════
+    // CONSTRUCTORS
+    // ════════════════════════════
+
+    public User() {
+    }
+
+    // ════════════════════════════
+    // GETTERS
+    // ════════════════════════════
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public BuyerType getBuyerType() {
+        return buyerType;
+    }
+
+    public String getBusinessName() {
+        return businessName;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public Boolean getIsVerified() {
+        return isVerified;
+    }
+
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    // ════════════════════════════
+    // SETTERS
+    // ════════════════════════════
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setPassword(
+            String password) {
+        this.password = password;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public void setBuyerType(
+            BuyerType buyerType) {
+        this.buyerType = buyerType;
+    }
+
+    public void setBusinessName(
+            String businessName) {
+        this.businessName = businessName;
+    }
+
+    public void setStatus(
+            UserStatus status) {
+        this.status = status;
+    }
+
+    public void setLocation(
+            String location) {
+        this.location = location;
+    }
+
+    public void setDistrict(
+            String district) {
+        this.district = district;
+    }
+
+    public void setIsVerified(
+            Boolean isVerified) {
+        this.isVerified = isVerified;
+    }
+
+    public void setIsActive(
+            Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    public void setCreatedAt(
+            LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", email='" + email + '\'' +
+            ", phone='" + phone + '\'' +
+            ", role=" + role +
+            ", status=" + status +
+            '}';
+    }
 }
